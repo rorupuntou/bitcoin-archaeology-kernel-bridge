@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+
+# Build artifacts & databases
+*.o
+*.a
+*.so
+build/
+dist/
+.leveldb/
+
+# Node runtimes & logs
+*.log
+*.pid
+node_*/
+data_*/
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+*~

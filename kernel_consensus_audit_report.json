@@ -1,0 +1,22 @@
+[
+  {
+    "height": 0,
+    "hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+    "validation": "GENESIS_ANCHOR",
+    "rules": "Satoshi_v0.1_PoW"
+  },
+  {
+    "height": 1,
+    "hash": "000000007b5c78bb3d4f81fa6d4296e0c4704a01fcb942be080fca927ba75d92",
+    "validation": "VALID",
+    "result": "UNSET",
+    "rules": "Satoshi_v0.1_PoW_Validated"
+  },
+  {
+    "height": 281,
+    "hash": "0000000034a962a41fded779c33a8f2c39399813a83192f16e6ced5ca7b21b7b",
+    "validation": "REJECTED_ORPHAN",
+    "result": "BLOCK_RESULT_MISSING_PREV",
+    "notes": "Orphan check validated in C++ kernel without bitcoind (Prev block missing)"
+  }
+]
