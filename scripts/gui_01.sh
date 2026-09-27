@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
-echo "Deteniendo daemon previo en node_08 si existe..."
-/home/roru/bitcoin_satoshi2/bitcoin_0.8/bitcoin-0.8.0/src/bitcoind -datadir=/home/roru/bitcoin_satoshi2/node_08 stop 2>/dev/null
-while pgrep -f "node_08.*bitcoind" > /dev/null; do sleep 0.5; done
+# ==============================================================================
+# Bitcoin v0.01 / v0.1 ALPHA GUI Launcher (Wayland / Hyprland compatible)
+# ==============================================================================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-echo "Lanzando Bitcoin v0.01 / v0.1 GUI..."
-nix-shell /home/roru/bitcoin_satoshi2/shell.nix --run "/home/roru/bitcoin_satoshi2/bitcoin -datadir=/home/roru/bitcoin_satoshi2/node_08 $@"
+BITCOIN_BIN="${REPO_ROOT}/bitcoin"
+DATADIR="${REPO_ROOT}/node_01"
+
+mkdir -p "${DATADIR}"
+
+if [ ! -f "${BITCOIN_BIN}" ]; then
+    echo "[-] Binary not found: ${BITCOIN_BIN}"
+    echo "    Compile inside nix-shell: make -f src/makefile.unix"
+    exit 1
+fi
+
+echo "Launching Bitcoin v0.01 / v0.1 ALPHA GUI with datadir=${DATADIR}..."
+export QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-xcb}"
+exec nix-shell "${REPO_ROOT}/shell.nix" --run "${BITCOIN_BIN} -datadir=${DATADIR} \"$@\""

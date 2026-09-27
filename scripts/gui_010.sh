@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
-echo "Deteniendo daemon previo en node_010 si existe..."
-/home/roru/bitcoin_satoshi2/bitcoin_0.10/bitcoin-0.10.4/src/bitcoin-cli -datadir=/home/roru/bitcoin_satoshi2/node_010 stop 2>/dev/null
-while pgrep -f "node_010.*bitcoind" > /dev/null; do sleep 0.5; done
+# ==============================================================================
+# Bitcoin Core v0.10.4 GUI Launcher (Wayland / Hyprland compatible)
+# ==============================================================================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-echo "Lanzando Bitcoin Core v0.10.4 GUI..."
-export QT_PLUGIN_PATH=/nix/store/64qmp7fap3740hxd2bsnpy10s9ndy5qx-qtbase-5.15.18-bin/lib/qt-5.15.18/plugins
-export QT_QPA_PLATFORM=xcb
-exec /home/roru/bitcoin_satoshi2/bitcoin_0.10/bitcoin-0.10.4/src/qt/bitcoin-qt -datadir=/home/roru/bitcoin_satoshi2/node_010 "$@"
+BITCOIN_QT="${REPO_ROOT}/bitcoin_0.10/bitcoin-0.10.4/src/qt/bitcoin-qt"
+DATADIR="${REPO_ROOT}/node_010"
+
+mkdir -p "${DATADIR}"
+
+if [ ! -f "${BITCOIN_QT}" ]; then
+    echo "[-] Binary not found: ${BITCOIN_QT}"
+    echo "    Compile inside nix-shell: cd nix/v0.10 && nix-shell --run 'make'"
+    exit 1
+fi
+
+echo "Launching Bitcoin Core v0.10.4 GUI with datadir=${DATADIR}..."
+export QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-xcb}"
+exec nix-shell "${REPO_ROOT}/nix/v0.10/shell.nix" --run "${BITCOIN_QT} -datadir=${DATADIR} \"$@\""
